@@ -10,7 +10,17 @@
  * License: CC BY
  */
 
+ add_action('admin_init', 'set_configs');
  
+ function set_configs(){
+
+    // configs-exemplo = nome do grupo de opções
+    // api-token = nome do parametro
+    register_setting('configs-exemplo', 'api-token');
+    register_setting('configs-exemplo', 'api-url');
+
+ }
+
  add_action('admin_menu','menu_do_meu_plugin');
 
 
