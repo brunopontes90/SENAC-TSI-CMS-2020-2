@@ -54,12 +54,47 @@ function abre_configuracoes(){
 
     global $wpdb;
 
+
+      // exibe o formulario para editar
+      if(isset($_GET['editar_form']) && !isset($_POST['alterar'])){
+
+        // recupera os dados do DB para edição
+        $id = preg_replace('/\D/', '', $_GET['editar_form']); // pega os dados confiaveis
+        $contato = $wpdb->get_results("SELECT nome, whatsapp FROM {$wpdb->prefix}agenda WHERE id = $id");
+
+
+        require 'form_editar_tpl.php';
+        exit();
+
+    }
+
+    // editar
+    // %s = para string
+    // %d = para digito
+    if(isset($_POST['alterar'])){
+       if( $wpdb->query($wpdb->prepare("   UPDATE 
+                                                {$wpdb->prefix}agenda 
+                                            SET 
+                                                nome = %s, whatsapp = %d 
+                                            WHERE 
+                                                id = %d", $_POST['nome'], $_POST['whatsapp'], $_POST['id']))){
+
+            $msg_alterar = 'Registro alterado com sucesso';
+                                            
+        }else{
+
+            $erro_alterar = 'Erro ao alterar o registro';
+        }
+    }
+
     // apagar
     if(isset($_GET['apagar'])){
 
         $id = preg_replace('/\D/', '', $_GET['apagar']); // pega os dados confiaveis
 
         $wpdb->query("DELETE FROM {$wpdb->prefix}agenda WHERE id = $id");
+
+        $msg_apagar = 'Contato excluido com sucesso';
 
     }
 
